@@ -117,8 +117,9 @@ function validate(e) {
 
   const form = e.target;
 
-  // Clear errors before checking again
+  // Clear messages before checking again
   removeFormErrors();
+  removeFormSuccess();
 
   // Prevent reloading the page
   e.preventDefault();
@@ -126,6 +127,7 @@ function validate(e) {
   // Reset form if all validators pass
   if (validateForm(fieldsValidator)) {
     form.reset();
+    displayFormSuccess(form,"Merci ! Votre réservation a été reçue.")
   }
 }
 
@@ -146,6 +148,30 @@ function displayFormError(element, message) {
 function removeFormErrors() {
   const formErrors = document.querySelectorAll('.form-error');
   formErrors.forEach((element) => {
+    element.remove();
+  });
+}
+
+// Show confirmation message
+function displayFormSuccess(form, message) {
+  const successSpan = document.createElement('span');
+  successSpan.className = 'form-success';
+  successSpan.textContent = message;
+  successSpan.style.fontSize = "16px";
+  successSpan.style.textAlign = "center"
+  successSpan.style.color = "white";
+  successSpan.style.backgroundColor = "green";
+  successSpan.style.borderRadius = "12px";
+  successSpan.style.display = "block";
+  successSpan.style.marginTop = "8px";
+  successSpan.style.padding = "12px";
+  form.appendChild(successSpan);
+}
+
+// Clear confirmation message
+function removeFormSuccess() {
+  const formSuccess = document.querySelectorAll('.form-success');
+  formSuccess.forEach((element) => {
     element.remove();
   });
 }
