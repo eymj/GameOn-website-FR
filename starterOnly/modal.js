@@ -51,7 +51,8 @@ function validateText(field) {
 // Validate quantity
 function validateNumber(field) {
   const value = field.value.trim();
-  if (!isNaN(value)) {
+  const num = value ? Number(value) : null
+  if (num != null && !isNaN(num)) {
     return true;
   } else {
     displayFormError(field,"Vous devez saisir un nombre.")
