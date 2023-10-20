@@ -43,6 +43,7 @@ function validateText(field) {
   if (value.length >= 2) {
     return true;
   } else {
+    displayFormError(field,"Veuillez entrer 2 caractères ou plus.")
     return false;
   }
 }
@@ -53,6 +54,7 @@ function validateNumber(field) {
   if (!isNaN(value)) {
     return true;
   } else {
+    displayFormError(field,"Vous devez saisir un nombre.")
     return false;
   }
 }
@@ -64,6 +66,7 @@ function validateEmail(field) {
   if (pattern.test(value)) {
     return true;
   } else {
+    displayFormError(field,"Vous devez saisir une adresse email valide.")
     return false;
   }
 }
@@ -75,12 +78,17 @@ function validateLocations(fields) {
           return true;
       }
   }
+  displayFormError(fields[0].parentNode,"Vous devez choisir une option.")
   return false;
 }
 
 // Validate mandatory checkbox
 function validateCheckbox(field) {
-  return field.checked;
+  if (!field.checked){
+    displayFormError(field,"Vous devez vérifier que vous acceptez les termes et conditions.")
+    return false
+  }
+  return true;
 }
 
 // Setup validators
@@ -107,9 +115,36 @@ function validateForm(validators) {
 function validate(e) {
 
   const form = e.target;
+
+  // Clear errors before checking again
+  removeFormErrors();
+
+  // Prevent reloading the page
   e.preventDefault();
 
+  // Reset form if all validators pass
   if (validateForm(fieldsValidator)) {
     form.reset();
   }
+}
+
+// Show errors under relevant element
+function displayFormError(element, message) {
+  const errorSpan = document.createElement('span');
+  errorSpan.className = 'form-error';
+  errorSpan.textContent = message;
+  errorSpan.style.fontSize = "12px";
+  errorSpan.style.color = "red";
+  errorSpan.style.display = "block";
+  errorSpan.style.marginTop = "2px";
+  errorSpan.style.marginBottom = "8px";
+  element.closest(".formData").insertAdjacentElement('afterend', errorSpan);
+}
+
+// Clear all errors
+function removeFormErrors() {
+  const formErrors = document.querySelectorAll('.form-error');
+  formErrors.forEach((element) => {
+    element.remove();
+  });
 }
